@@ -86,13 +86,28 @@ namespace DevFlow.Controllers
                 return NotFound();
             }
         }
-        //TODO NOT FINISHED
         [HttpGet("Last-3-Posted-JobOffers")]
         public ActionResult<List<ResponseJobOfferWithCompanyDTO>> GetLast3Offers()
         {
             try
             {
-                return Ok();
+                var last3JobOffers = _jobOfferService.GetLast3PostedJobOffers();
+                var last3JobOffersWithCompanyDTO = _mapper.Map<List<ResponseJobOfferWithCompanyDTO>>(last3JobOffers);
+                return Ok(last3JobOffersWithCompanyDTO);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+        [HttpGet("Get-JobOffers-On-Postal")]
+        public ActionResult<List<ResponseJobOfferWithPostal>> GetJobOffersOnPostal(string postal)
+        {
+            try
+            {
+                var jobOffersOnPostal = _jobOfferService.GetJobOffersOnPostal(postal);
+                var listJobOffersOnPostalWithCompanyDTO = _mapper.Map<List<ResponseJobOfferWithPostal>>(jobOffersOnPostal);
+                return Ok(listJobOffersOnPostalWithCompanyDTO);
             }
             catch (KeyNotFoundException)
             {

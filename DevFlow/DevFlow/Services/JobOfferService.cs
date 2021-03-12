@@ -65,5 +65,36 @@ namespace DevFlow.Services
             else
                 throw new KeyNotFoundException("JobOffers don't exist");
         }
+        public List<JobOffer> GetLast3PostedJobOffers()
+        {
+            using var db = new JobOffersDbContext();
+            var highestIdJobOffer = db.JobOffers.Max(x => x.Id);
+            var testError = db.JobOffers.FirstOrDefault(x => x.Id == highestIdJobOffer);
+            if (testError != null)
+            {
+                var jobOffers = db.JobOffers
+                .Include(x => x.Company).ToList()
+                .OrderByDescending(x => x.CreatedAt).Take(3).ToList();
+                return jobOffers;
+            }
+            else
+                throw new KeyNotFoundException("JobOffers don't exist or not enough");
+
+        }
+
+        public List<JobOffer> GetJobOffersOnPostal(string postal)
+        {
+            using var db = new JobOffersDbContext();
+            var testError = db.JobOffers.FirstOrDefault(x => x.Company.Postal == postal);
+            if (testError != null)
+            {
+                var listOfJobOffersOnPostal = db.JobOffers
+                .Include(x => x.Company).ToList()
+                .Where(x => x.Company.Postal == postal).ToList();
+                return listOfJobOffersOnPostal;
+            }
+            else
+                throw new KeyNotFoundException("No JobOffers at the postal");
+        }
     }
 }

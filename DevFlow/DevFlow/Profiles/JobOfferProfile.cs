@@ -12,9 +12,13 @@ namespace DevFlow.Profiles
     {
         public JobOfferProfile()
         {
+            CreateMap<CreateJobOfferDTO, JobOffer>().ReverseMap();
             CreateMap<ResponseJobOfferDTO, JobOffer>().ReverseMap();
             CreateMap<ResponseJobOfferWithCompanyDTO, JobOffer>().ReverseMap();
-            CreateMap<CreateJobOfferDTO, JobOffer>().ReverseMap();
+            CreateMap<JobOffer, ResponseJobOfferWithPostal>()
+                .ForMember(x=>x.Postal, opt => opt.MapFrom(src => src.Company.Postal))
+                //.ForMember(x => x.Company, opt => opt.MapFrom(src => src.Postal))
+                .ReverseMap();
         }
     }
 }

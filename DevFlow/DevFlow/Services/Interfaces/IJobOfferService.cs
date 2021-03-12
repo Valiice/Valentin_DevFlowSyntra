@@ -10,5 +10,7 @@ namespace DevFlow.Services.Interfaces
         List<JobOffer> GetAllJobOffers();
         JobOffer GetJobOffer(int idJobOffer);
         void UpdateJobOfferById(int idJobOfferToChange, JobOffer newJobOfferValues);
+        List<JobOffer> GetLast3PostedJobOffers();
+        List<JobOffer> GetJobOffersOnPostal(string postal);
     }
 }
